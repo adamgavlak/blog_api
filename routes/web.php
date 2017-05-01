@@ -14,3 +14,16 @@
 $app->get('/', function () use ($app) {
     return $app->version();
 });
+
+$app->group(['prefix' => 'api'], function($app)
+{
+    $app->get('posts', 'PostController@index');
+    $app->get('posts/{slug}', 'PostController@show');
+
+    $app->group(['middleware' => 'auth'], function($app) {
+        $app->post('posts', 'PostController@create');
+        $app->put('posts/{slug}', 'PostController@update');
+        $app->patch('posts/{slug}', 'PostController@update');
+        $app->delete('posts/{slug}', 'PostController@destroy');
+    });
+});
